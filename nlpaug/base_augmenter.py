@@ -80,7 +80,7 @@ class Augmenter:
 
         for _ in range(max_retry_times+1):
             augmented_results = []
-            if num_thread == 1 or :
+            if num_thread == 1 or 'cuda' in self.device:
                 # TODO: support multiprocessing for GPU
                 # https://discuss.pytorch.org/t/using-cuda-multiprocessing-with-single-gpu/7300
                 augmented_results = [action_fx(clean_data) for _ in range(n)]

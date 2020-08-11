@@ -1,6 +1,7 @@
 import random
 import numpy as np
 from multiprocessing.dummy import Pool as ThreadPool
+from tqdm import tqdm
 
 from nlpaug.util import Action, Method, WarningException, WarningName, WarningCode, WarningMessage
 
@@ -124,7 +125,7 @@ class Augmenter:
         """
         augmented_results = []
         if num_thread == 1 or 'cuda' in self.device:
-            for d in data:
+            for d in tqdm(data):
                 augmented_result = self.augment(data=d, n=n, num_thread=1)  # TOOD: cuda does not support mulithread
                 if n == 1:
                     augmented_results.append(augmented_result)
@@ -132,7 +133,7 @@ class Augmenter:
                     augmented_results.extend(augmented_result)
         else:
             batch_data = [data[i:i+num_thread] for i in range(0, len(data), num_thread)]
-            for i in range(n):
+            for i in tqdm(range(n)):
                 for mini_batch_data in batch_data:
                     augmented_results.extend(self._parallel_augments(self.augment, mini_batch_data))
 
